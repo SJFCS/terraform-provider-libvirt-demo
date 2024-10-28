@@ -1,0 +1,14 @@
+# Terraform files
+*.tfstate
+*.tfstate.backup
+*.tfvars
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate.d/
+crash.log
+
+# Image files
+*.img
+*.qcow2
+*.iso
+

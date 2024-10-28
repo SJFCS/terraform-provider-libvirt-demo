@@ -1,0 +1,30 @@
+#cloud-config
+
+bootcmd:
+  - echo "hello world!"
+package_update: true
+packages:
+    - qemu-guest-agent
+runcmd:
+  - sudo systemctl enable --now qemu-guest-agent.service
+ssh_pwauth: true
+disable_root: false
+users:
+  - name: root
+    plain_text_passwd: 'root'
+    lock_passwd: false
+  - name: admin
+    plain_text_passwd: 'admin'
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']  
+    primary_group: admin    # Use existing admin group as primary group
+    groups: [users, devops]            
+    home: /home/admin
+    shell: /bin/bash
+    lock_passwd: false
+    ssh-authorized-keys:
+      - ${jsonencode(trimspace(file("~/.ssh/id_ed25519.pub")))}
+
+growpart:
+  mode: auto
+  devices: ['/']
+final_message: "The system is finally up, after $UPTIME seconds"
